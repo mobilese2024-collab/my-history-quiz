@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — UPPSC इतिहास अभ्यास Portal</title>
+  <style>
+    :root {
+      --ink: #0e1a2b;
+      --paper: #f6efe1;
+      --amber: #e8a33d;
+      --line: rgba(246,239,225,.13);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(1100px 600px at 15% -10%, #1d3557 0%, transparent 60%), var(--ink);
+      color: var(--paper);
+      font-family: system-ui, -apple-system, sans-serif;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .login-card {
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+    }
+    h2 { font-size: 22px; font-weight: 800; color: var(--amber); margin-bottom: 6px; text-align: center; }
+    p.sub { font-size: 13px; color: #93a5c0; text-align: center; margin-bottom: 24px; }
+    .input-group { margin-bottom: 16px; }
+    label { display: block; font-size: 12px; font-weight: 700; color: #93a5c0; margin-bottom: 6px; letter-spacing: 0.1em; }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--paper);
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus { border-color: var(--amber); }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: var(--amber);
+      color: #2a1a00;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    button:hover { filter: brightness(1.1); }
+    .error { color: #e3695f; font-size: 13px; text-align: center; margin-top: 14px; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>UPPSC इतिहास अभ्यास</h2>
+    <p class="sub">जारी रखने के लिए लॉगिन करें</p>
+    
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="email">EMAIL</label>
+        <input type="email" id="email" required placeholder="student@example.com">
+      </div>
+      <div class="input-group">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" id="submitBtn">लॉगिन करें</button>
+      <div id="errorMsg" class="error"></div>
+    </form>
+  </div>
+
+  <!-- Firebase Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // Aapki Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAj3KchopAFiAZcQ1INhJ6R-O7_-Vmxjdg",
+      authDomain: "adhunik-bharat.firebaseapp.com",
+      projectId: "adhunik-bharat",
+      storageBucket: "adhunik-bharat.firebasestorage.app",
+      messagingSenderId: "496526169377",
+      appId: "1:496526169377:web:4af9d69e039d11d4761a60",
+      measurementId: "G-94RF86ZY4B"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Agar user pehle se logged in hai toh direct modern.html par redirect karein
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "modern.html";
+      }
+    });
+
+    const loginForm = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      errorMsg.style.display = "none";
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          // Login Success
+          window.location.href = "modern.html";
+        })
+        .catch((error) => {
+          // Login Error
+          errorMsg.innerText = "Email या Password गलत है!";
+          errorMsg.style.display = "block";
+        });
+    });
+  </script>
+</body>
+</html>
