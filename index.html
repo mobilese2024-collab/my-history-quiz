@@ -100,10 +100,10 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Agar user pehle se logged in hai toh direct quiz.html par redirect karein
+    // Agar user pehle se logged in hai toh direct modern.html par redirect karein
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        window.location.href = "quiz.html";
+        window.location.href = "modern.html";
       }
     });
 
@@ -120,7 +120,7 @@
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
           // Login Success
-          window.location.href = "quiz.html";
+          window.location.href = "modern.html";
         })
         .catch((error) => {
           // Login Error
